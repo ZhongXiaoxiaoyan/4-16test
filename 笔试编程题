@@ -1,4 +1,4 @@
-·­×ªÊıÁĞ
+ç¿»è½¬æ•°åˆ—
 #include <iostream>
 using namespace std;
 
@@ -13,7 +13,7 @@ int main()
 
 
 
-Ö½ÅÆÓÎÏ·
+çº¸ç‰Œæ¸¸æˆ
 #include <iostream>
 #include <algorithm>
 using namespace std;
@@ -57,27 +57,27 @@ int main()
 
 
 
-Ì°³ÔµÄĞ¡Q
+è´ªåƒçš„å°Q
 #include<iostream>
 using namespace std;
 int n,m;
-//¼ÆËãµÚÒ»Ìì³Ôs¸öÇÉ¿ËÁ¦Ò»¹²ĞèÒª¶àÉÙ¸ö¶àÉÙ¸öÇÉ¿ËÁ¦
+//è®¡ç®—ç¬¬ä¸€å¤©åƒsä¸ªå·§å…‹åŠ›ä¸€å…±éœ€è¦å¤šå°‘ä¸ªå¤šå°‘ä¸ªå·§å…‹åŠ›
 int sum(int s){
     int sum=0;
     for(int i=0;i<n;i++){
         sum+=s;
-        s=(s+1)>>1;//ÏòÉÏÈ¡Õû
+        s=(s+1)>>1;//å‘ä¸Šå–æ•´
     }
     return sum;
 }
-//¶ş·Ö²éÕÒ
+//äºŒåˆ†æŸ¥æ‰¾
 int fun(){
     if(n==1) return m;
     int low=1;
-    int high=m;//µÚÒ»ÌìµÄÇÉ¿ËÁ¦Ò»¶¨ÊÇ´óÓÚµÈÓÚ1Ğ¡ÓÚµÈÓÚmµÄ
+    int high=m;//ç¬¬ä¸€å¤©çš„å·§å…‹åŠ›ä¸€å®šæ˜¯å¤§äºç­‰äº1å°äºç­‰äºmçš„
     while(low<high){
-        int mid=(low+high+1)>>1;//ÏòÉÏÈ¡Õû
-        if(sum(mid)==m) return mid;//Èç¹ûµÚÒ»Ìì³Ômid¸öÇÉ¿ËÁ¦£¬¸Õ¸ÕºÃ³ÔÍêËùÓĞÇÉ¿ËÁ¦£¬ÄÇÃ´Ö±½Ó·µ»Ø
+        int mid=(low+high+1)>>1;//å‘ä¸Šå–æ•´
+        if(sum(mid)==m) return mid;//å¦‚æœç¬¬ä¸€å¤©åƒmidä¸ªå·§å…‹åŠ›ï¼Œåˆšåˆšå¥½åƒå®Œæ‰€æœ‰å·§å…‹åŠ›ï¼Œé‚£ä¹ˆç›´æ¥è¿”å›
         else if(sum(mid)<m){
             low=mid;
         }else{
@@ -97,7 +97,7 @@ int main()
 
 
 
-Ğ¡QµÄ¸èµ¥
+å°Qçš„æ­Œå•
 #include <iostream>
 
 using namespace std;
@@ -127,7 +127,7 @@ int main() {
 }
 
 
-°²ÅÅ»úÆ÷
+å®‰æ’æœºå™¨
 #include <iostream>
 #include <string.h>
 #include <algorithm>
@@ -136,7 +136,7 @@ using namespace std;
 const int maxn = 1e5 + 10;
 struct node {
     int x, y;
-}e[maxn], f[maxn];  //¶¨ÒåÁ½¸ö½á¹¹Êı×é
+}e[maxn], f[maxn];  //å®šä¹‰ä¸¤ä¸ªç»“æ„æ•°ç»„
 int cnt[105];
 int cmp(node a, node b)
 {
@@ -184,7 +184,7 @@ int main()
 
 
 
-»­¼ÒĞ¡Q
+ç”»å®¶å°Q
 #include <iostream>
 using namespace std;
 unsigned char canvas[50][50];
@@ -194,7 +194,7 @@ int checkAndClear(unsigned char cmp, int slope, int i, int j)
 {
     int flag = 0;
     do {
-        //ÅĞ¶Ï×î³¤±Ê»­²¢ÇÒÖÃÁã¶ÔÓ¦ÑÕÉ«Î»
+        //åˆ¤æ–­æœ€é•¿ç¬”ç”»å¹¶ä¸”ç½®é›¶å¯¹åº”é¢œè‰²ä½
         if (canvas[i][j] & cmp)
         {
             canvas[i][j] &= ~cmp;
@@ -217,7 +217,7 @@ int main()
         cin >> str;
         for(int j = 0; j < m; ++j)
         {
-            switch(str[j]) //ÓÃÎ»±íÊ¾ÑÕÉ«
+            switch(str[j]) //ç”¨ä½è¡¨ç¤ºé¢œè‰²
             {
             case 'B': canvas[i][j] = 1; break;
             case 'Y': canvas[i][j] = 2; break;
@@ -231,8 +231,8 @@ int main()
     {
         for(int j = 0; j < m; ++j)
         {
-            result += checkAndClear(1, -1, i, j); //À¶É«1 Ğ±ÂÊ-1
-            result += checkAndClear(2, 1, i, j); // »ÆÉ«2 Ğ±ÂÊ 1
+            result += checkAndClear(1, -1, i, j); //è“è‰²1 æ–œç‡-1
+            result += checkAndClear(2, 1, i, j); // é»„è‰²2 æ–œç‡ 1
         }
     }
     cout << result << endl;
