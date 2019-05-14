@@ -1,0 +1,360 @@
+
+
+#include <stdio.h>
+#include <stdlib.h>
+struct ListNode
+{
+	int val;
+	struct ListNode *next;
+};
+// 单链表逆置
+// 方法一：将指针反转，用三个指针
+// n1 n2 n3
+// 1->2->3->4->5
+// NULL<-1<-2<-3<-4<-5
+struct ListNode* reverseList(struct ListNode* head)
+{
+	if (head == NULL || head->next == NULL)
+		return head;
+
+	struct ListNode* n1, *n2, *n3;
+	n1 = head;
+	n2 = n1->next;
+	n3 = n2->next;
+
+	n1->next = NULL;
+	while (n2)
+	{
+		n2->next = n1;
+		n1 = n2;
+		n2 = n3;
+		if (n3 != NULL)
+			n3 = n3->next;
+	}
+	return n1;
+};
+
+// 方法2：新创建一个结点newHead = NULL
+// 拿下来结点进行头插，直到最后一个结点
+struct ListNode* reverseList(struct ListNode* head)
+{
+	struct ListNode* cur = head;
+	struct ListNode* newHead = NULL;
+	while (cur)
+	{
+		struct ListNode* next = cur->next;
+		cur->next = newHead;
+		newHead = cur;
+		cur = next;
+	}
+	return newHead;
+}
+
+
+
+// 面试题：找链表的中间结点
+// 快慢指针，一个指针一次走一步， 一个指针一次走两步
+struct ListNode* middleNode(struct ListNode* head)
+{
+	struct ListNode* slow = head;
+	struct ListNode* fast = head;
+
+	while (fast && fast->next)
+	{
+		slow = slow->next;
+		fast = fast->next->next;
+	}
+	return slow;
+}
+
+
+
+// 输出链表中倒数第K个结点
+ListNode* FindKthToTail(ListNode* head, unsigned int k)
+{
+	if (head == NULL || k < 0)
+		return NULL;
+
+	struct ListNode* fast = head;
+	while (k--)
+	{
+		if (fast)          //如果给的K大于链表个数时， 就会返回空
+			fast = fast->next;
+		else
+			return NULL;
+	}
+	struct ListNode* slow = head;
+	while (fast)
+	{
+		slow = slow->next;
+		fast = fast->next;
+	}
+	return slow;
+}
+
+
+// 面试题：合并两个有序链表
+struct ListNode* mergeTwoLists(struct ListNode* l1, struct ListNode* l2)
+{
+	if (l1 == NULL)
+		return l2;
+	else if (l2 == NULL)
+		return l1;
+
+	// 先取小的结点作为头
+	struct ListNode* head, *tail;
+	if (l1->val < l2->val)
+	{
+		head = l1;
+		l1 = l1->next;
+	}
+	else
+	{
+		head = l2;
+		l2 = l2->next;
+	}
+	// 拿小的结点进行尾插
+	tail = head;
+	while (l1 && l2)  //其中有一个链表结束
+	{
+		if (l1->val < l2->val)
+		{
+			tail->next = l1;
+			l1 = l1->next;
+		}
+		else
+		{
+			tail->next = l2;
+			l2 = l2->next;
+		}
+		tail = tail->next;
+	}
+
+	if (l1 != NULL)
+		tail->next = l1;
+
+	if (l2 != NULL)
+		tail->next = l2;
+	
+	return head;
+}
+
+
+
+
+// 面试题：分割链表，分成大于和小于x的两部分，且数据顺序不能改变
+// 输入：
+// 4 6 8 6 3 5 3 9 1 5   , x = 5
+// 输出：
+// 4 3 3 1 6 8 6 5 9 5
+
+ListNode* partition(ListNode* pHead, int x)
+{
+	if (pHead == NULL)
+		return NULL;
+
+	struct ListNode* lessHead, *lessTail, *greaterHead, *greaterTail;
+	lessHead = lessTail = (ListNode*)malloc(sizeof(struct ListNode));
+	greaterHead = greaterTail = (ListNode*)malloc(sizeof(struct ListNode));
+	struct ListNode* cur = pHead;
+	while (cur)
+	{
+		// 小于x的链到lessTail中
+		if (cur->val < x)
+		{
+			lessTail->next = cur;
+			lessTail = lessTail->next;
+		}
+		else   //大于等于x的链到greaterTail中
+		{
+			greaterTail->next = cur;
+			greaterTail = greaterTail->next;
+		}
+		cur = cur->next;
+	}
+	
+	lessTail->next = greaterHead->next;
+	greaterTail->next = NULL;
+
+	pHead = lessHead->next;
+	free(lessHead);
+	free(greaterHead);
+
+	return pHead;
+}
+
+
+
+// 面试题：删除掉链表中重复的结点
+//方法1：在原链表上进行删除
+ListNode* deleteDuplication(ListNode* pHead)
+{
+	if (pHead == NULL || pHead->next == NULL)
+		return pHead;
+
+	struct ListNode* n0 = NULL;
+	struct ListNode* n1 = pHead;
+	struct ListNode* n2 = n1->next;
+
+	while (n2 != NULL)
+	{
+		if (n1->val != n2->val) //说明前后两个值不相等
+		{
+			n0 = n1;
+			n1 = n2;
+			n2 = n2->next;
+		}
+		else
+		{	//n2区找第一个不相同的结点
+			while (n2 && n2->val == n1->val)
+			{
+				n2 = n2->next;
+			}
+
+			if (n0)
+				n0->next = n2;
+			else
+				pHead = n2;
+
+			// 删除掉重复结点
+			while (n1 != n2)
+			{
+				struct ListNode* next = n1->next;
+				free(n1);
+				n1 = next;
+			}
+			n1 = n2;
+			if (n2)
+				n2 = n2->next;
+		}
+	}
+	return pHead;
+}
+
+// 方法2：创建新节点，把原链表的结点拿下来尾插。
+ListNode* deleteDuplication(ListNode* pHead)
+{
+	if (pHead == NULL || pHead->next == NULL)
+		return pHead;
+
+	struct ListNode* n1 = pHead;
+	struct ListNode* n2 = n1->next;
+	
+	pHead = (struct ListNode*)malloc(sizeof(ListNode));
+	struct ListNode* tail = pHead;
+
+	while (n2)
+	{
+		if (n1->val != n2->val)
+		{
+			tail->next = n1;
+			tail = tail->next;
+			n1 = n2;
+			n2 = n2->next;
+		}
+		else
+		{
+			while (n2 && n2->val == n1->val)
+			{
+				n2 = n2->next;
+			}
+
+			n1 = n2;
+			if (n2)
+				n2 = n2->next;
+			
+			//处理尾巴结点。
+			tail->next = n1;
+		}
+	}
+
+	return pHead->next;
+}
+
+
+// 面试题：链表的回文结构，（对称的，1 2 3 4 4 3 2 1）
+// 方法1：找到链表的中间结点，从中间结点进行切割，将后半部分逆置，将逆置的和前半部分的链表进行比较，若相等则回文。
+bool chkPalindrome(ListNode* A)
+{
+	int n;
+	struct ListNode* cur = A;
+	while (cur)
+	{
+		cur = cur->next;
+		n++;
+	}
+
+	int mid = n / 2;
+	while (mid--)
+	{
+		cur = cur->next;
+	}
+	// cur指向中间结点
+
+	struct ListNode* head1 = A;
+	struct ListNode* head2 = reverseList(cur);
+
+	mid = n / 2;
+	while (mid--)
+	{
+		if (head1->val == head2->val)
+		{
+			head1 = head1->next;
+			head2 = head2->next;
+		}
+		else
+			return false;
+	}
+	return true;
+}
+
+// 方法2：将链表整体逆置，再对比逆置后和逆置前进行比较
+bool chkPalindrome(ListNode* A)
+{
+	struct ListNode* head1 = A;
+	struct ListNode* head2 = reverseList(cur);
+
+	while (head1 && head2)
+	{
+		if (head1->val == head2->val)
+		{
+			head1 = head1->next;
+			head2 = head2->next;
+		}
+		else
+			return false;
+	}
+	return true;
+}
+
+// 方法3：链表长度小于等于900，将链表数据放入数组中，在数组中进行对比。
+bool chkpalindrome(ListNode *A)
+{
+	int a[900];
+	int n = 0;
+	struct ListNode* cur = A;
+	while (cur)
+	{
+		a[n++] = cur->val;
+		cur = cur->next;
+	}
+
+	int left = 0, right = n - 1;
+	while (left < right)
+	{
+		if (a[left] != a[right])
+			return false;
+		++left;
+		--right;
+	}
+	return true;
+}
+
+
+
+
+
+
+
+
+
